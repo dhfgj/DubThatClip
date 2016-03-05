@@ -1,0 +1,34 @@
+@charset "shift_jis";
+
+body {
+    color: #111111;
+    margin: 0px;
+    padding:0px;
+    font: 75%2 Meiryo;
+}
+
+#container {
+    width: 80%;
+    letter-spacing: 0.1em;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#header {
+    
+}
+
+#logo {
+    float: left;
+}
+
+#main {
+    clear: both;
+	width: 100%;
+}
+
+#footer {
+    clear: both;
+	width: 100%;
+	text-align: center;
+}
