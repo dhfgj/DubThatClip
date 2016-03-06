@@ -24,22 +24,41 @@ def store_voice_over():
 
 @app.route("/dubIt/api/recording", methods=["GET"])
 def get_recording():
+    '''
+    get the recording file from db return the file source
+    '''
     pass
-    # get the recording file from db return the file source
-    # return 
 
-# @app.route("/videoID", methods=["POST"]):
-# def pull_video_id():
-#     vid_id = request.form.get("id")
-#     # 8028026
+@app.route('/upload', methods= ['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+       f = request.files['files']
+       f.save('./uploads/'+f.filename)
+       return '200'
+    elif request.method == 'GET':
+       user_id = request.args.get('user_id','NULL0')
+       user_name = request.args.get('user_name','NULL0')
+       audio_file = request.args.get('audio_file','NULL0')
+       url = request.args.get('url','NULL0')
+       twitter_handle = request.args.get('twitter_handle','NULL0')
+       user = User(user_id, user_name, audio_file, url, twitter_handle)
+       print user
 
-#     vid_info_json = get_video_info(vid_id, 'faces')
+       db.session.add(user)
+       db.session.commit()
 
 
+       return '200' 
+    else:
+       return 'Upload Page'
 
+#if __name__ == '__main__':
+#   app.debug = True
+#   app.run(host="0.0.0.0",
+#           port=8080)
 
 
 if __name__ == "__main__":
     connect_to_db(app)
-    port = 8080#int(os.environ.get("PORT", 5000))
+    port = 8080  #int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0",debug=True, port=port)
