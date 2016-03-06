@@ -21,9 +21,14 @@ def home():
 
 @app.route("/<user_name>")
 def user_page(user_name = None):
+    try:
+    #q = db.query(User).filter(User.user_name == user_name)
+        q = User.query.filter_by(user_name = user_name).all()[0]
+        print q.user_name, q.audio_file, q.url
+        return render_template("users.html")    
+    except:
+        return 'User ' + user_name + ' not in DB'
 
-    return render_template("users.html")    
-#    return user_name
 
 @app.route("/dubIt/api/postrecording", methods=["POST"])
 def store_voice_over():
