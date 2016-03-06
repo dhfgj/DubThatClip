@@ -17,14 +17,14 @@ def home():
 
     return render_template("index.html")
 
-@app.route("/dubIt/api/postrecording", methods=["POST"]):
+@app.route("/dubIt/api/postrecording", methods=["POST"])
 def store_voice_over():
     """ grab voice recording and store in db"""
-
-    
+    pass
 
 @app.route("/dubIt/api/recording", methods=["GET"])
 def get_recording():
+    pass
     # get the recording file from db return the file source
     # return 
 
@@ -32,7 +32,7 @@ def get_recording():
 # def pull_video_id():
 #     vid_id = request.form.get("id")
 #     # 8028026
-    
+
 #     vid_info_json = get_video_info(vid_id, 'faces')
 
 
@@ -41,5 +41,5 @@ def get_recording():
 
 if __name__ == "__main__":
     connect_to_db(app)
-    port = int(os.environ.get("PORT", 5000))
-    app.run(debug=True, port=port)
+    port = 8080#int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0",debug=True, port=port)
