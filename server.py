@@ -4,6 +4,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from get_video_info import get_video_info
 import os
+import json
 
 from model import connect_to_db, db, User
 from gp_to_mp3 import gp_to_mp3
@@ -39,24 +40,28 @@ def get_recording():
 @app.route('/upload', methods= ['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-       f = request.files['files']
-       f.save('./uploads/'+f.filename)
-       gp_to_mp3(f.filename)
-       return '200'
-    elif request.method == 'GET':
-       user_id = request.args.get('user_id','NULL0')
-       user_name = request.args.get('user_name','NULL0')
-       audio_file = request.args.get('audio_file','NULL0')
-       url = request.args.get('url','NULL0')
-       twitter_handle = request.args.get('twitter_handle','NULL0')
-       user = User(user_id, user_name, audio_file, url, twitter_handle)
-       print user
-
-       db.session.add(user)
-       db.session.commit()
-
-
-       return '200' 
+       #json_data = json.loads(request.data)
+       if 'files' in request.files.keys():
+           f = request.files['files']
+           f.save('./uploads/'+f.filename)
+           gp_to_mp3(f.filename, session.get('audio_file', 'tmp'))
+           return '200. Uploaded files'
+       else:
+           json_data = json.loads(request.data)
+           user_id = json_data.get('user_id','NULL0')
+           user_name = json_data.get('user_name','NULL0')
+           audio_file = json_data.get('audio_file','NULL0')
+           url = json_data.get('url','NULL0')
+           twitter_handle = json_data.get('twitter_handle','NULL0')
+           session['audio_file'] = audio_file
+           user = User(user_id, user_name, audio_file, url, twitter_handle)
+           try:
+               db.session.add(user)
+               db.session.commit()
+               return '200. User Added'
+           except:
+               pass
+               return '200. Error Duplicate user' 
     else:
        return 'Upload Page'
 
